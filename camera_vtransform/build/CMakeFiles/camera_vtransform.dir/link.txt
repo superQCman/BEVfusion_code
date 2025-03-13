@@ -1,0 +1,1 @@
+/usr/bin/c++ -g CMakeFiles/camera_vtransform.dir/camera_vtransform.cpp.o -o camera_vtransform 

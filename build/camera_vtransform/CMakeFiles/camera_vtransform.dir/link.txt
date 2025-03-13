@@ -1,0 +1,1 @@
+/usr/bin/c++ -fPIC -g -shared -Wl,-soname,libcamera_vtransform.so -o libcamera_vtransform.so CMakeFiles/camera_vtransform.dir/camera_vtransform.cpp.o 

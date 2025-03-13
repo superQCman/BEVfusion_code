@@ -195,3 +195,5 @@ private:
 };
 
 TORCH_MODULE(LidarBackbone);
+
+float* lidar_backbone();

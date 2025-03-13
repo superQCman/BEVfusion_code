@@ -1,4 +1,5 @@
 #include <torch/torch.h>
+#include "camera_backbone.h"
 
 // 定义ResNet-50的Bottleneck模块
 struct BottleneckImpl : torch::nn::Module {
@@ -365,25 +366,34 @@ struct CameraStreamImpl : torch::nn::Module {
                 .align_corners(true)
         );
 
-        std::cout << "Final feature shape: " << bev_feature.sizes() << std::endl;
-        std::cout << "Final depth weights shape: " << depth_weights_out.sizes() << std::endl;
+        // std::cout << "Final feature shape: " << bev_feature.sizes() << std::endl;
+        // std::cout << "Final depth weights shape: " << depth_weights_out.sizes() << std::endl;
 
         return {bev_feature, depth_weights_out};
     }
 };
 TORCH_MODULE(CameraStream);
 
-int main() {
-    // 缩小输入尺寸进行测试
-    auto img = torch::randn({1, 6, 3, 256, 704});
-    auto depth = torch::randn({1, 6, 1, 256, 704});
+void camera_backbone(float* img, float* depth, float* camera_features){
+    auto img_tensor = torch::from_blob(img, {1, 6, 3, 256, 704}, torch::kFloat);
+    auto depth_tensor = torch::from_blob(depth, {1, 6, 1, 256, 704}, torch::kFloat);
 
     CameraStream model;
-    auto [feature, depth_weights] = model->forward(img, depth);
-    
+    auto [feature, depth_weights] = model->forward(img_tensor, depth_tensor);
     std::cout << "Final feature shape: " << feature.sizes() << std::endl;
-    std::cout << "Final depth weights shape: " << depth_weights.sizes() << std::endl;
+    std::cout<< "feature: " << feature[5][31][87][79] << std::endl;
+    // 将feature转换为float*
+    float* feature_ptr = feature.data_ptr<float>();
+    std::cout << "feature_ptr: " << feature_ptr[6*32*88*80-1] << std::endl;
+    memcpy(camera_features, feature_ptr, 6*32*88*80*sizeof(float));
 }
+
+// int main() {
+//     float* img = new float[1 * 6 * 3 * 256 * 704];
+//     float* depth = new float[1 * 6 * 1 * 256 * 704];
+//     float* camera_backbone_output = camera_backbone(img, depth);
+//     return 0;
+// }
 
 // int main() {
 //     // 输入：2张256x256的RGB图像
