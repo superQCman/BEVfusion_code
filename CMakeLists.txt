@@ -14,6 +14,10 @@ set(ONNXRUNTIME_INCLUDE_DIR "/usr/local/include/onnxruntime")
 set(ONNXRUNTIME_LIB_DIR "/usr/local/lib")
 find_library(ONNXRUNTIME_LIBRARY onnxruntime PATHS ${ONNXRUNTIME_LIB_DIR} REQUIRED)
 
+# 设置interchiplet库
+set(INTERCHIPLET_INCLUDE_DIR "${SIMULATOR_ROOT}/interchiplet/includes")
+set(INTERCHIPLET_C_LIB "${SIMULATOR_ROOT}/interchiplet/lib/libinterchiplet_c.a")
+
 # 添加子目录
 add_subdirectory(camera_backbone)
 add_subdirectory(camera_vtransform)
@@ -33,6 +37,7 @@ target_include_directories(bevfusion PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/fuser
     ${CMAKE_CURRENT_SOURCE_DIR}/head
     ${ONNXRUNTIME_INCLUDE_DIR}
+    ${INTERCHIPLET_INCLUDE_DIR}
 )
 
 # 链接库
@@ -44,6 +49,7 @@ target_link_libraries(bevfusion
     head
     ${TORCH_LIBRARIES}
     ${ONNXRUNTIME_LIBRARY}
+    ${INTERCHIPLET_C_LIB}
 )
 
 # # 允许使用相对路径的 RPATH

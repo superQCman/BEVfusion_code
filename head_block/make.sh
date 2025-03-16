@@ -1,1 +1,0 @@
-g++ head.cpp -o libhead.o -I /usr/local/include/onnxruntime -L /usr/local/lib -lonnxruntime
