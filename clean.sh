@@ -1,2 +1,2 @@
 rm -rf proc*
-rm -f buffer*
+rm -f buffer* bench.txt
