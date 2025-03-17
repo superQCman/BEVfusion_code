@@ -4,6 +4,10 @@
 #include <cstdint>
 #include <cassert>
 #include "head.h"
+#include "pipe_comm.h"
+#include "apis_c.h"
+
+InterChiplet::PipeComm global_pipe_comm;
 
 // Convert float32 to float16 (IEEE 754 Half-precision)
 uint16_t float32_to_float16(float value) {
@@ -100,11 +104,23 @@ void head(float* input) {
     // return output_data;
 }
 
-int main() {
+int main(int argc, char** argv) {
+    int idX = atoi(argv[1]);
+    int idY = atoi(argv[2]);
     float* input = new float[512 * 180 * 180];
-    for (size_t i = 0; i < 512 * 180 * 180; ++i) {
-        input[i] = 1.0f;
-    }
+    // for (size_t i = 0; i < 512 * 180 * 180; ++i) {
+    //     input[i] = 1.0f;
+    // }
+    long long unsigned int timeNow = 1;
+    std::string fileName = InterChiplet::receiveSync(5, 5, idX, idY);
+    global_pipe_comm.read_data(fileName.c_str(), input, 512 * 180 * 180 * sizeof(float));
+    long long int time_end = InterChiplet::readSync(timeNow, 5, 5, idX, idY, 512 * 180 * 180 * sizeof(float), 0);
+    std::cout<<"--------------------------------"<<std::endl;
     head(input);
+    bool finished = true;
+    fileName = InterChiplet::sendSync(idX, idY, 5, 5);
+    global_pipe_comm.write_data(fileName.c_str(), &finished, sizeof(bool));
+    time_end = InterChiplet::writeSync(time_end, idX, idY, 5, 5, sizeof(bool), 0);
+    std::cout << "head done" << std::endl;
     return 0;
 }

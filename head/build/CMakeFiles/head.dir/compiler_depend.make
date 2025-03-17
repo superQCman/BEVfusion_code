@@ -264,8 +264,82 @@ CMakeFiles/head.dir/head.cpp.o: ../head.cpp \
   /usr/include/c++/11/bits/stream_iterator.h \
   /usr/include/c++/11/cassert \
   /usr/include/assert.h \
-  ../head.h
+  ../head.h \
+  /home/ting/SourceCode/Chiplet_Heterogeneous_newVersion/interchiplet/includes/pipe_comm.h \
+  /usr/include/fcntl.h \
+  /usr/include/x86_64-linux-gnu/bits/fcntl.h \
+  /usr/include/x86_64-linux-gnu/bits/fcntl-linux.h \
+  /usr/include/x86_64-linux-gnu/bits/types/struct_iovec.h \
+  /usr/include/linux/falloc.h \
+  /usr/include/x86_64-linux-gnu/bits/stat.h \
+  /usr/include/x86_64-linux-gnu/bits/struct_stat.h \
+  /usr/include/unistd.h \
+  /usr/include/x86_64-linux-gnu/bits/posix_opt.h \
+  /usr/include/x86_64-linux-gnu/bits/environments.h \
+  /usr/include/x86_64-linux-gnu/bits/confname.h \
+  /usr/include/x86_64-linux-gnu/bits/getopt_posix.h \
+  /usr/include/x86_64-linux-gnu/bits/getopt_core.h \
+  /usr/include/x86_64-linux-gnu/bits/unistd_ext.h \
+  /usr/include/linux/close_range.h \
+  /usr/include/c++/11/fstream \
+  /usr/include/c++/11/bits/codecvt.h \
+  /usr/include/x86_64-linux-gnu/c++/11/bits/basic_file.h \
+  /usr/include/x86_64-linux-gnu/c++/11/bits/c++io.h \
+  /usr/include/c++/11/bits/fstream.tcc \
+  /usr/include/c++/11/map \
+  /usr/include/c++/11/bits/stl_tree.h \
+  /usr/include/c++/11/bits/stl_map.h \
+  /usr/include/c++/11/bits/stl_multimap.h \
+  /usr/include/c++/11/sstream \
+  /usr/include/c++/11/bits/sstream.tcc \
+  /home/ting/SourceCode/Chiplet_Heterogeneous_newVersion/interchiplet/includes/global_define.h \
+  /home/ting/SourceCode/Chiplet_Heterogeneous_newVersion/interchiplet/includes/sync_protocol.h \
+  /home/ting/SourceCode/Chiplet_Heterogeneous_newVersion/interchiplet/includes/apis_c.h
 
+
+/home/ting/SourceCode/Chiplet_Heterogeneous_newVersion/interchiplet/includes/sync_protocol.h:
+
+/home/ting/SourceCode/Chiplet_Heterogeneous_newVersion/interchiplet/includes/global_define.h:
+
+/usr/include/c++/11/sstream:
+
+/usr/include/c++/11/bits/stl_multimap.h:
+
+/usr/include/c++/11/bits/stl_map.h:
+
+/usr/include/c++/11/bits/stl_tree.h:
+
+/usr/include/c++/11/map:
+
+/home/ting/SourceCode/Chiplet_Heterogeneous_newVersion/interchiplet/includes/apis_c.h:
+
+/usr/include/c++/11/bits/fstream.tcc:
+
+/usr/include/x86_64-linux-gnu/c++/11/bits/c++io.h:
+
+/usr/include/x86_64-linux-gnu/c++/11/bits/basic_file.h:
+
+/usr/include/c++/11/fstream:
+
+/usr/include/linux/close_range.h:
+
+/usr/include/x86_64-linux-gnu/bits/unistd_ext.h:
+
+/usr/include/x86_64-linux-gnu/bits/getopt_core.h:
+
+/usr/include/x86_64-linux-gnu/bits/confname.h:
+
+/usr/include/x86_64-linux-gnu/bits/posix_opt.h:
+
+/usr/include/x86_64-linux-gnu/bits/struct_stat.h:
+
+/usr/include/x86_64-linux-gnu/bits/stat.h:
+
+/usr/include/x86_64-linux-gnu/bits/fcntl-linux.h:
+
+/usr/include/x86_64-linux-gnu/bits/fcntl.h:
+
+/usr/include/fcntl.h:
 
 ../head.h:
 
@@ -314,6 +388,8 @@ CMakeFiles/head.dir/head.cpp.o: ../head.cpp \
 /usr/include/c++/11/ext/atomicity.h:
 
 /usr/include/c++/11/bits/stl_pair.h:
+
+/usr/include/x86_64-linux-gnu/bits/getopt_posix.h:
 
 /usr/include/x86_64-linux-gnu/bits/setjmp.h:
 
@@ -421,6 +497,8 @@ CMakeFiles/head.dir/head.cpp.o: ../head.cpp \
 
 /usr/include/x86_64-linux-gnu/bits/libc-header-start.h:
 
+/usr/include/x86_64-linux-gnu/bits/types/struct_iovec.h:
+
 /usr/include/c++/11/bits/memoryfwd.h:
 
 /usr/include/c++/11/bits/stl_function.h:
@@ -503,6 +581,8 @@ CMakeFiles/head.dir/head.cpp.o: ../head.cpp \
 
 /usr/lib/gcc/x86_64-linux-gnu/11/include/stdint.h:
 
+/usr/include/unistd.h:
+
 /usr/include/c++/11/bits/stl_algobase.h:
 
 /usr/include/c++/11/bits/nested_exception.h:
@@ -538,6 +618,8 @@ CMakeFiles/head.dir/head.cpp.o: ../head.cpp \
 /usr/include/c++/11/ext/string_conversions.h:
 
 /usr/include/x86_64-linux-gnu/c++/11/bits/atomic_word.h:
+
+/usr/include/x86_64-linux-gnu/bits/environments.h:
 
 /usr/include/x86_64-linux-gnu/c++/11/bits/os_defines.h:
 
@@ -691,6 +773,8 @@ CMakeFiles/head.dir/head.cpp.o: ../head.cpp \
 
 /usr/include/string.h:
 
+/usr/include/c++/11/bits/sstream.tcc:
+
 /usr/include/c++/11/new:
 
 /usr/local/include/onnxruntime/onnxruntime_float16.h:
@@ -711,6 +795,8 @@ CMakeFiles/head.dir/head.cpp.o: ../head.cpp \
 
 /usr/include/x86_64-linux-gnu/bits/mathcalls.h:
 
+/usr/include/linux/falloc.h:
+
 /usr/include/c++/11/bits/postypes.h:
 
 /usr/include/x86_64-linux-gnu/bits/mathcalls-narrow.h:
@@ -726,6 +812,8 @@ CMakeFiles/head.dir/head.cpp.o: ../head.cpp \
 /usr/include/x86_64-linux-gnu/c++/11/bits/c++config.h:
 
 /usr/include/c++/11/tr1/legendre_function.tcc:
+
+/home/ting/SourceCode/Chiplet_Heterogeneous_newVersion/interchiplet/includes/pipe_comm.h:
 
 /usr/include/c++/11/tr1/riemann_zeta.tcc:
 
@@ -774,6 +862,8 @@ CMakeFiles/head.dir/head.cpp.o: ../head.cpp \
 /usr/include/c++/11/bits/hashtable.h:
 
 /usr/include/c++/11/bits/hashtable_policy.h:
+
+/usr/include/c++/11/bits/codecvt.h:
 
 /usr/include/c++/11/bits/basic_ios.tcc:
 

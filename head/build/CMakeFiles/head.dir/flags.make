@@ -4,7 +4,7 @@
 # compile CXX with /usr/bin/c++
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/usr/local/include/onnxruntime
+CXX_INCLUDES = -I/usr/local/include/onnxruntime -I/home/ting/SourceCode/Chiplet_Heterogeneous_newVersion/interchiplet/includes
 
 CXX_FLAGS = 
 

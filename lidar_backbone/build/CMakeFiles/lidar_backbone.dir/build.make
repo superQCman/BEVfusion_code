@@ -53,10 +53,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/ting/SourceCode/BEVfusion-code/lidar_backbone
+CMAKE_SOURCE_DIR = /home/ting/SourceCode/Chiplet_Heterogeneous_newVersion/benchmark/BEVfusion-code/lidar_backbone
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/ting/SourceCode/BEVfusion-code/lidar_backbone/build
+CMAKE_BINARY_DIR = /home/ting/SourceCode/Chiplet_Heterogeneous_newVersion/benchmark/BEVfusion-code/lidar_backbone/build
 
 # Include any dependencies generated for this target.
 include CMakeFiles/lidar_backbone.dir/depend.make
@@ -72,16 +72,16 @@ include CMakeFiles/lidar_backbone.dir/flags.make
 CMakeFiles/lidar_backbone.dir/lidar_backbone.cpp.o: CMakeFiles/lidar_backbone.dir/flags.make
 CMakeFiles/lidar_backbone.dir/lidar_backbone.cpp.o: ../lidar_backbone.cpp
 CMakeFiles/lidar_backbone.dir/lidar_backbone.cpp.o: CMakeFiles/lidar_backbone.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ting/SourceCode/BEVfusion-code/lidar_backbone/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/lidar_backbone.dir/lidar_backbone.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/lidar_backbone.dir/lidar_backbone.cpp.o -MF CMakeFiles/lidar_backbone.dir/lidar_backbone.cpp.o.d -o CMakeFiles/lidar_backbone.dir/lidar_backbone.cpp.o -c /home/ting/SourceCode/BEVfusion-code/lidar_backbone/lidar_backbone.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ting/SourceCode/Chiplet_Heterogeneous_newVersion/benchmark/BEVfusion-code/lidar_backbone/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/lidar_backbone.dir/lidar_backbone.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/lidar_backbone.dir/lidar_backbone.cpp.o -MF CMakeFiles/lidar_backbone.dir/lidar_backbone.cpp.o.d -o CMakeFiles/lidar_backbone.dir/lidar_backbone.cpp.o -c /home/ting/SourceCode/Chiplet_Heterogeneous_newVersion/benchmark/BEVfusion-code/lidar_backbone/lidar_backbone.cpp
 
 CMakeFiles/lidar_backbone.dir/lidar_backbone.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/lidar_backbone.dir/lidar_backbone.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/ting/SourceCode/BEVfusion-code/lidar_backbone/lidar_backbone.cpp > CMakeFiles/lidar_backbone.dir/lidar_backbone.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/ting/SourceCode/Chiplet_Heterogeneous_newVersion/benchmark/BEVfusion-code/lidar_backbone/lidar_backbone.cpp > CMakeFiles/lidar_backbone.dir/lidar_backbone.cpp.i
 
 CMakeFiles/lidar_backbone.dir/lidar_backbone.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/lidar_backbone.dir/lidar_backbone.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/ting/SourceCode/BEVfusion-code/lidar_backbone/lidar_backbone.cpp -o CMakeFiles/lidar_backbone.dir/lidar_backbone.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/ting/SourceCode/Chiplet_Heterogeneous_newVersion/benchmark/BEVfusion-code/lidar_backbone/lidar_backbone.cpp -o CMakeFiles/lidar_backbone.dir/lidar_backbone.cpp.s
 
 # Object files for target lidar_backbone
 lidar_backbone_OBJECTS = \
@@ -90,25 +90,22 @@ lidar_backbone_OBJECTS = \
 # External object files for target lidar_backbone
 lidar_backbone_EXTERNAL_OBJECTS =
 
-liblidar_backbone.so.1.0.0: CMakeFiles/lidar_backbone.dir/lidar_backbone.cpp.o
-liblidar_backbone.so.1.0.0: CMakeFiles/lidar_backbone.dir/build.make
-liblidar_backbone.so.1.0.0: /home/ting/SourceCode/libtorch/lib/libtorch.so
-liblidar_backbone.so.1.0.0: /home/ting/SourceCode/libtorch/lib/libc10.so
-liblidar_backbone.so.1.0.0: /home/ting/SourceCode/libtorch/lib/libkineto.a
-liblidar_backbone.so.1.0.0: /home/ting/SourceCode/libtorch/lib/libc10.so
-liblidar_backbone.so.1.0.0: CMakeFiles/lidar_backbone.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/ting/SourceCode/BEVfusion-code/lidar_backbone/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX shared library liblidar_backbone.so"
+lidar_backbone-1.0.0: CMakeFiles/lidar_backbone.dir/lidar_backbone.cpp.o
+lidar_backbone-1.0.0: CMakeFiles/lidar_backbone.dir/build.make
+lidar_backbone-1.0.0: /home/ting/SourceCode/libtorch/lib/libtorch.so
+lidar_backbone-1.0.0: /home/ting/SourceCode/libtorch/lib/libc10.so
+lidar_backbone-1.0.0: /home/ting/SourceCode/libtorch/lib/libkineto.a
+lidar_backbone-1.0.0: /home/ting/SourceCode/Chiplet_Heterogeneous_newVersion/interchiplet/lib/libinterchiplet_c.a
+lidar_backbone-1.0.0: /home/ting/SourceCode/libtorch/lib/libc10.so
+lidar_backbone-1.0.0: CMakeFiles/lidar_backbone.dir/link.txt
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/ting/SourceCode/Chiplet_Heterogeneous_newVersion/benchmark/BEVfusion-code/lidar_backbone/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable lidar_backbone"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/lidar_backbone.dir/link.txt --verbose=$(VERBOSE)
-	$(CMAKE_COMMAND) -E cmake_symlink_library liblidar_backbone.so.1.0.0 liblidar_backbone.so.1 liblidar_backbone.so
+	$(CMAKE_COMMAND) -E cmake_symlink_executable lidar_backbone-1.0.0 lidar_backbone
 
-liblidar_backbone.so.1: liblidar_backbone.so.1.0.0
-	@$(CMAKE_COMMAND) -E touch_nocreate liblidar_backbone.so.1
-
-liblidar_backbone.so: liblidar_backbone.so.1.0.0
-	@$(CMAKE_COMMAND) -E touch_nocreate liblidar_backbone.so
+lidar_backbone: lidar_backbone-1.0.0
 
 # Rule to build all files generated by this target.
-CMakeFiles/lidar_backbone.dir/build: liblidar_backbone.so
+CMakeFiles/lidar_backbone.dir/build: lidar_backbone
 .PHONY : CMakeFiles/lidar_backbone.dir/build
 
 CMakeFiles/lidar_backbone.dir/clean:
@@ -116,6 +113,6 @@ CMakeFiles/lidar_backbone.dir/clean:
 .PHONY : CMakeFiles/lidar_backbone.dir/clean
 
 CMakeFiles/lidar_backbone.dir/depend:
-	cd /home/ting/SourceCode/BEVfusion-code/lidar_backbone/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/ting/SourceCode/BEVfusion-code/lidar_backbone /home/ting/SourceCode/BEVfusion-code/lidar_backbone /home/ting/SourceCode/BEVfusion-code/lidar_backbone/build /home/ting/SourceCode/BEVfusion-code/lidar_backbone/build /home/ting/SourceCode/BEVfusion-code/lidar_backbone/build/CMakeFiles/lidar_backbone.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/ting/SourceCode/Chiplet_Heterogeneous_newVersion/benchmark/BEVfusion-code/lidar_backbone/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/ting/SourceCode/Chiplet_Heterogeneous_newVersion/benchmark/BEVfusion-code/lidar_backbone /home/ting/SourceCode/Chiplet_Heterogeneous_newVersion/benchmark/BEVfusion-code/lidar_backbone /home/ting/SourceCode/Chiplet_Heterogeneous_newVersion/benchmark/BEVfusion-code/lidar_backbone/build /home/ting/SourceCode/Chiplet_Heterogeneous_newVersion/benchmark/BEVfusion-code/lidar_backbone/build /home/ting/SourceCode/Chiplet_Heterogeneous_newVersion/benchmark/BEVfusion-code/lidar_backbone/build/CMakeFiles/lidar_backbone.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/lidar_backbone.dir/depend
 

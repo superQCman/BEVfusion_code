@@ -1,6 +1,10 @@
 #include "lidar_backbone.h"
+#include "pipe_comm.h"
+#include "apis_c.h"
 
-float* lidar_backbone(){
+InterChiplet::PipeComm global_pipe_comm;
+
+float* lidar_backbone(float* input){
     // 创建输入 - 使用正确的空间尺寸
     auto indices = torch::tensor({
         {0, 0, 0},      // batch index
@@ -9,7 +13,7 @@ float* lidar_backbone(){
         {20, 20, 20}     // x
     }, torch::kLong);
     
-    auto values = torch::randn({3, 5}); // 5个输入通道
+    auto values = torch::from_blob(input, {3, 5}); // 5个输入通道
     std::vector<int64_t> spatial_size = {1440, 1440, 41}; // 初始空间尺寸
 
     // 创建模型
@@ -29,7 +33,18 @@ float* lidar_backbone(){
     return output_ptr_copy;
 }
 
-// int main(){
-//     float* lidar_backbone_output = lidar_backbone();
-//     return 0;
-// }
+int main(int argc, char** argv) {
+    int idX = atoi(argv[1]);
+    int idY = atoi(argv[2]);
+    float* input = new float[3 * 5];
+    long long unsigned int timeNow = 1;
+    std::string fileName = InterChiplet::receiveSync(5, 5, idX, idY);
+    global_pipe_comm.read_data(fileName.c_str(), input, 3 * 5 * sizeof(float));
+    long long int time_end = InterChiplet::readSync(timeNow, 5, 5, idX, idY, 3 * 5 * sizeof(float), 0);
+    std::cout<<"--------------------------------"<<std::endl;  
+    float* lidar_backbone_output = lidar_backbone(input);
+    fileName = InterChiplet::sendSync(idX, idY, 5, 5);
+    global_pipe_comm.write_data(fileName.c_str(), lidar_backbone_output, 1 * 256 * 180 * 180 * sizeof(float));
+    time_end = InterChiplet::writeSync(time_end, idX, idY, 5, 5, 1 * 256 * 180 * 180 * sizeof(float), 0);
+    return 0;
+}

@@ -18,6 +18,10 @@
 //#include <half.hpp>
 #include "readTensorFromFile.h"
 #include "fuser.h"
+#include "pipe_comm.h"
+#include "apis_c.h"
+
+InterChiplet::PipeComm global_pipe_comm;
 #define MAX(X,Y) ( X > Y ? X : Y)
 #define MIN(X,Y) ( X < Y ? X : Y)
 #define CLIP(X,L) ( MAX(MIN(X,L), -L) )
@@ -894,72 +898,74 @@ static inline void node_Concat_32( const float input_0[1][256][180][180], const 
 	}
 }
 
+//获取$BENCHMARK_ROOT
+std::string benchmark_root = std::string(getenv("BENCHMARK_ROOT"));
 
-auto temp_parent_fuser_0_weight = read4DTensorFromFile<256,336,3,3>("/home/ting/SourceCode/BEVfusion-code/fuser/parent.fuser.0.weight.txt");
+auto temp_parent_fuser_0_weight = read4DTensorFromFile<256,336,3,3>(benchmark_root + "/fuser/parent.fuser.0.weight.txt");
 
-auto temp_parent_fuser_0_bias = read1DTensorFromFile<256>("/home/ting/SourceCode/BEVfusion-code/fuser/parent.fuser.0.bias.txt");
+auto temp_parent_fuser_0_bias = read1DTensorFromFile<256>(benchmark_root + "/fuser/parent.fuser.0.bias.txt");
 
-auto temp_parent_decoder_backbone_blocks_0_0_weight = read4DTensorFromFile<128,256,3,3>("/home/ting/SourceCode/BEVfusion-code/fuser/parent.decoder.backbone.blocks.0.0.weight.txt");
+auto temp_parent_decoder_backbone_blocks_0_0_weight = read4DTensorFromFile<128,256,3,3>(benchmark_root + "/fuser/parent.decoder.backbone.blocks.0.0.weight.txt");
 
-auto temp_parent_decoder_backbone_blocks_0_0_bias = read1DTensorFromFile<128>("/home/ting/SourceCode/BEVfusion-code/fuser/parent.decoder.backbone.blocks.0.0.bias.txt");
+auto temp_parent_decoder_backbone_blocks_0_0_bias = read1DTensorFromFile<128>(benchmark_root + "/fuser/parent.decoder.backbone.blocks.0.0.bias.txt");
 
-auto temp_parent_decoder_backbone_blocks_0_3_weight = read4DTensorFromFile<128,128,3,3>("/home/ting/SourceCode/BEVfusion-code/fuser/parent.decoder.backbone.blocks.0.3.weight.txt");
+auto temp_parent_decoder_backbone_blocks_0_3_weight = read4DTensorFromFile<128,128,3,3>(benchmark_root + "/fuser/parent.decoder.backbone.blocks.0.3.weight.txt");
 
-auto temp_parent_decoder_backbone_blocks_0_3_bias = read1DTensorFromFile<128>("/home/ting/SourceCode/BEVfusion-code/fuser/parent.decoder.backbone.blocks.0.3.bias.txt");
+auto temp_parent_decoder_backbone_blocks_0_3_bias = read1DTensorFromFile<128>(benchmark_root + "/fuser/parent.decoder.backbone.blocks.0.3.bias.txt");
 
-auto temp_parent_decoder_backbone_blocks_0_6_weight = read4DTensorFromFile<128,128,3,3>("/home/ting/SourceCode/BEVfusion-code/fuser/parent.decoder.backbone.blocks.0.6.weight.txt");
+auto temp_parent_decoder_backbone_blocks_0_6_weight = read4DTensorFromFile<128,128,3,3>(benchmark_root + "/fuser/parent.decoder.backbone.blocks.0.6.weight.txt");
 
-auto temp_parent_decoder_backbone_blocks_0_6_bias = read1DTensorFromFile<128>("/home/ting/SourceCode/BEVfusion-code/fuser/parent.decoder.backbone.blocks.0.6.bias.txt");
+auto temp_parent_decoder_backbone_blocks_0_6_bias = read1DTensorFromFile<128>(benchmark_root + "/fuser/parent.decoder.backbone.blocks.0.6.bias.txt");
 
-auto temp_parent_decoder_backbone_blocks_0_9_weight = read4DTensorFromFile<128,128,3,3>("/home/ting/SourceCode/BEVfusion-code/fuser/parent.decoder.backbone.blocks.0.9.weight.txt");
+auto temp_parent_decoder_backbone_blocks_0_9_weight = read4DTensorFromFile<128,128,3,3>(benchmark_root + "/fuser/parent.decoder.backbone.blocks.0.9.weight.txt");
 
-auto temp_parent_decoder_backbone_blocks_0_9_bias = read1DTensorFromFile<128>("/home/ting/SourceCode/BEVfusion-code/fuser/parent.decoder.backbone.blocks.0.9.bias.txt");
+auto temp_parent_decoder_backbone_blocks_0_9_bias = read1DTensorFromFile<128>(benchmark_root + "/fuser/parent.decoder.backbone.blocks.0.9.bias.txt");
 
-auto temp_parent_decoder_backbone_blocks_0_12_weight = read4DTensorFromFile<128,128,3,3>("/home/ting/SourceCode/BEVfusion-code/fuser/parent.decoder.backbone.blocks.0.12.weight.txt");
+auto temp_parent_decoder_backbone_blocks_0_12_weight = read4DTensorFromFile<128,128,3,3>(benchmark_root + "/fuser/parent.decoder.backbone.blocks.0.12.weight.txt");
 
-auto temp_parent_decoder_backbone_blocks_0_12_bias = read1DTensorFromFile<128>("/home/ting/SourceCode/BEVfusion-code/fuser/parent.decoder.backbone.blocks.0.12.bias.txt");
+auto temp_parent_decoder_backbone_blocks_0_12_bias = read1DTensorFromFile<128>(benchmark_root + "/fuser/parent.decoder.backbone.blocks.0.12.bias.txt");
 
-auto temp_parent_decoder_backbone_blocks_0_15_weight = read4DTensorFromFile<128,128,3,3>("/home/ting/SourceCode/BEVfusion-code/fuser/parent.decoder.backbone.blocks.0.15.weight.txt");
+auto temp_parent_decoder_backbone_blocks_0_15_weight = read4DTensorFromFile<128,128,3,3>(benchmark_root + "/fuser/parent.decoder.backbone.blocks.0.15.weight.txt");
 
-auto temp_parent_decoder_backbone_blocks_0_15_bias = read1DTensorFromFile<128>("/home/ting/SourceCode/BEVfusion-code/fuser/parent.decoder.backbone.blocks.0.15.bias.txt");
+auto temp_parent_decoder_backbone_blocks_0_15_bias = read1DTensorFromFile<128>(benchmark_root + "/fuser/parent.decoder.backbone.blocks.0.15.bias.txt");
 
-auto temp_parent_decoder_backbone_blocks_1_0_weight = read4DTensorFromFile<256,128,3,3>("/home/ting/SourceCode/BEVfusion-code/fuser/parent.decoder.backbone.blocks.1.0.weight.txt");
+auto temp_parent_decoder_backbone_blocks_1_0_weight = read4DTensorFromFile<256,128,3,3>(benchmark_root + "/fuser/parent.decoder.backbone.blocks.1.0.weight.txt");
 
-auto temp_parent_decoder_backbone_blocks_1_0_bias = read1DTensorFromFile<256>("/home/ting/SourceCode/BEVfusion-code/fuser/parent.decoder.backbone.blocks.1.0.bias.txt");
+auto temp_parent_decoder_backbone_blocks_1_0_bias = read1DTensorFromFile<256>(benchmark_root + "/fuser/parent.decoder.backbone.blocks.1.0.bias.txt");
 
-auto temp_parent_decoder_backbone_blocks_1_3_weight = read4DTensorFromFile<256,256,3,3>("/home/ting/SourceCode/BEVfusion-code/fuser/parent.decoder.backbone.blocks.1.3.weight.txt");
+auto temp_parent_decoder_backbone_blocks_1_3_weight = read4DTensorFromFile<256,256,3,3>(benchmark_root + "/fuser/parent.decoder.backbone.blocks.1.3.weight.txt");
 
-auto temp_parent_decoder_backbone_blocks_1_3_bias = read1DTensorFromFile<256>("/home/ting/SourceCode/BEVfusion-code/fuser/parent.decoder.backbone.blocks.1.3.bias.txt");
+auto temp_parent_decoder_backbone_blocks_1_3_bias = read1DTensorFromFile<256>(benchmark_root + "/fuser/parent.decoder.backbone.blocks.1.3.bias.txt");
 
-auto temp_parent_decoder_backbone_blocks_1_6_weight = read4DTensorFromFile<256,256,3,3>("/home/ting/SourceCode/BEVfusion-code/fuser/parent.decoder.backbone.blocks.1.6.weight.txt");
+auto temp_parent_decoder_backbone_blocks_1_6_weight = read4DTensorFromFile<256,256,3,3>(benchmark_root + "/fuser/parent.decoder.backbone.blocks.1.6.weight.txt");
 
-auto temp_parent_decoder_backbone_blocks_1_6_bias = read1DTensorFromFile<256>("/home/ting/SourceCode/BEVfusion-code/fuser/parent.decoder.backbone.blocks.1.6.bias.txt");
+auto temp_parent_decoder_backbone_blocks_1_6_bias = read1DTensorFromFile<256>(benchmark_root + "/fuser/parent.decoder.backbone.blocks.1.6.bias.txt");
 
-auto temp_parent_decoder_backbone_blocks_1_9_weight = read4DTensorFromFile<256,256,3,3>("/home/ting/SourceCode/BEVfusion-code/fuser/parent.decoder.backbone.blocks.1.9.weight.txt");
+auto temp_parent_decoder_backbone_blocks_1_9_weight = read4DTensorFromFile<256,256,3,3>(benchmark_root + "/fuser/parent.decoder.backbone.blocks.1.9.weight.txt");
 
-auto temp_parent_decoder_backbone_blocks_1_9_bias = read1DTensorFromFile<256>("/home/ting/SourceCode/BEVfusion-code/fuser/parent.decoder.backbone.blocks.1.9.bias.txt");
+auto temp_parent_decoder_backbone_blocks_1_9_bias = read1DTensorFromFile<256>(benchmark_root + "/fuser/parent.decoder.backbone.blocks.1.9.bias.txt");
 
-auto temp_parent_decoder_backbone_blocks_1_12_weight = read4DTensorFromFile<256,256,3,3>("/home/ting/SourceCode/BEVfusion-code/fuser/parent.decoder.backbone.blocks.1.12.weight.txt");
+auto temp_parent_decoder_backbone_blocks_1_12_weight = read4DTensorFromFile<256,256,3,3>(benchmark_root + "/fuser/parent.decoder.backbone.blocks.1.12.weight.txt");
 
-auto temp_parent_decoder_backbone_blocks_1_12_bias = read1DTensorFromFile<256>("/home/ting/SourceCode/BEVfusion-code/fuser/parent.decoder.backbone.blocks.1.12.bias.txt");
+auto temp_parent_decoder_backbone_blocks_1_12_bias = read1DTensorFromFile<256>(benchmark_root + "/fuser/parent.decoder.backbone.blocks.1.12.bias.txt");
 
-auto temp_parent_decoder_backbone_blocks_1_15_weight = read4DTensorFromFile<256,256,3,3>("/home/ting/SourceCode/BEVfusion-code/fuser/parent.decoder.backbone.blocks.1.15.weight.txt");
+auto temp_parent_decoder_backbone_blocks_1_15_weight = read4DTensorFromFile<256,256,3,3>(benchmark_root + "/fuser/parent.decoder.backbone.blocks.1.15.weight.txt");
 
-auto temp_parent_decoder_backbone_blocks_1_15_bias = read1DTensorFromFile<256>("/home/ting/SourceCode/BEVfusion-code/fuser/parent.decoder.backbone.blocks.1.15.bias.txt");
+auto temp_parent_decoder_backbone_blocks_1_15_bias = read1DTensorFromFile<256>(benchmark_root + "/fuser/parent.decoder.backbone.blocks.1.15.bias.txt");
 
-auto temp_parent_decoder_neck_deblocks_0_0_weight = read4DTensorFromFile<256,128,1,1>("/home/ting/SourceCode/BEVfusion-code/fuser/parent.decoder.neck.deblocks.0.0.weight.txt");
+auto temp_parent_decoder_neck_deblocks_0_0_weight = read4DTensorFromFile<256,128,1,1>(benchmark_root + "/fuser/parent.decoder.neck.deblocks.0.0.weight.txt");
 
-auto temp_parent_decoder_neck_deblocks_0_0_bias = read1DTensorFromFile<256>("/home/ting/SourceCode/BEVfusion-code/fuser/parent.decoder.neck.deblocks.0.0.bias.txt");
+auto temp_parent_decoder_neck_deblocks_0_0_bias = read1DTensorFromFile<256>(benchmark_root + "/fuser/parent.decoder.neck.deblocks.0.0.bias.txt");
 
-auto temp_parent_decoder_neck_deblocks_1_0_weight = read4DTensorFromFile<256,256,2,2>("/home/ting/SourceCode/BEVfusion-code/fuser/parent.decoder.neck.deblocks.1.0.weight.txt");
+auto temp_parent_decoder_neck_deblocks_1_0_weight = read4DTensorFromFile<256,256,2,2>(benchmark_root + "/fuser/parent.decoder.neck.deblocks.1.0.weight.txt");
 
-auto temp_parent_decoder_neck_deblocks_1_1_weight = read1DTensorFromFile<256>("/home/ting/SourceCode/BEVfusion-code/fuser/parent.decoder.neck.deblocks.1.1.weight.txt");
+auto temp_parent_decoder_neck_deblocks_1_1_weight = read1DTensorFromFile<256>(benchmark_root + "/fuser/parent.decoder.neck.deblocks.1.1.weight.txt");
 
-auto temp_parent_decoder_neck_deblocks_1_1_bias = read1DTensorFromFile<256>("/home/ting/SourceCode/BEVfusion-code/fuser/parent.decoder.neck.deblocks.1.1.bias.txt");
+auto temp_parent_decoder_neck_deblocks_1_1_bias = read1DTensorFromFile<256>(benchmark_root + "/fuser/parent.decoder.neck.deblocks.1.1.bias.txt");
 
-auto temp_parent_decoder_neck_deblocks_1_1_running_mean = read1DTensorFromFile<256>("/home/ting/SourceCode/BEVfusion-code/fuser/parent.decoder.neck.deblocks.1.1.running_mean.txt");
+auto temp_parent_decoder_neck_deblocks_1_1_running_mean = read1DTensorFromFile<256>(benchmark_root + "/fuser/parent.decoder.neck.deblocks.1.1.running_mean.txt");
 
-auto temp_parent_decoder_neck_deblocks_1_1_running_var = read1DTensorFromFile<256>("/home/ting/SourceCode/BEVfusion-code/fuser/parent.decoder.neck.deblocks.1.1.running_var.txt");
+auto temp_parent_decoder_neck_deblocks_1_1_running_var = read1DTensorFromFile<256>(benchmark_root + "/fuser/parent.decoder.neck.deblocks.1.1.running_var.txt");
 
 union tensor_union_0 {
 float tensor_510[1][336][180][180];
@@ -1414,7 +1420,7 @@ float* fuser(float* tensor_camera_copy, float* tensor_lidar_copy){
     entry(tensor_camera, tensor_lidar, tensor_middle);
 
     // 创建一个一维数组来存储结果并返回
-    float* result = (float*)malloc(1 * 256 * 180 * 180 * sizeof(float));
+    float* result = (float*)malloc(1 * 512 * 180 * 180 * sizeof(float));
     if (result == nullptr) {
         std::cerr << "Failed to allocate memory for result" << std::endl;
         free(tensor_camera);
@@ -1424,7 +1430,7 @@ float* fuser(float* tensor_camera_copy, float* tensor_lidar_copy){
     }
     
     // 复制数据到一维数组
-    memcpy(result, tensor_middle, 1 * 256 * 180 * 180 * sizeof(float));
+    memcpy(result, tensor_middle, 1 * 512 * 180 * 180 * sizeof(float));
 
     // 释放动态分配的内存
     free(tensor_camera);
@@ -1434,35 +1440,49 @@ float* fuser(float* tensor_camera_copy, float* tensor_lidar_copy){
 	return result;
 }
 
-// int main() {
-// 	float *tensor_camera = new float[1 * 80 * 180 * 180];
-// 	float *tensor_lidar = new float[1 * 256 * 180 * 180];
-// 	// 初始化
-// 	for (size_t i = 0; i < 1 * 80 * 180 * 180; ++i) {
-// 		tensor_camera[i] = 1.0f;
-// 	}
-// 	for (size_t i = 0; i < 1 * 256 * 180 * 180; ++i) {
-// 		tensor_lidar[i] = 1.0f;
-// 	}
-// 	float *fuser_output = fuser(tensor_camera, tensor_lidar);
-// 	if (fuser_output == nullptr) {
-// 		printf("Failed to allocate memory for fuser_output\n");
-// 		return 1;
-// 	}
+int main(int argc, char** argv) {
+	int idX = atoi(argv[1]);
+	int idY = atoi(argv[2]);
+	float *tensor_camera = new float[1 * 80 * 180 * 180];
+	float *tensor_lidar = new float[1 * 256 * 180 * 180];
+	// // 初始化
+	// for (size_t i = 0; i < 1 * 80 * 180 * 180; ++i) {
+	// 	tensor_camera[i] = 1.0f;
+	// }
+	// for (size_t i = 0; i < 1 * 256 * 180 * 180; ++i) {
+	// 	tensor_lidar[i] = 1.0f;
+	// }
+	long long unsigned int timeNow = 1;
+	std::string fileName = InterChiplet::receiveSync(5, 5, idX, idY);
+	global_pipe_comm.read_data(fileName.c_str(), tensor_camera, 1 * 80 * 180 * 180 * sizeof(float));
+	long long int time_end = InterChiplet::readSync(timeNow, 5, 5, idX, idY, 1 * 80 * 180 * 180 * sizeof(float), 0);
+	std::cout<<"--------------------------------"<<std::endl;
+	fileName = InterChiplet::receiveSync(5, 5, idX, idY);
+	global_pipe_comm.read_data(fileName.c_str(), tensor_lidar, 1 * 256 * 180 * 180 * sizeof(float));
+	time_end = InterChiplet::readSync(timeNow, 5, 5, idX, idY, 1 * 256 * 180 * 180 * sizeof(float), 0);
+	std::cout<<"--------------------------------"<<std::endl;
+	float *fuser_output = fuser(tensor_camera, tensor_lidar);
+	if (fuser_output == nullptr) {
+		printf("Failed to allocate memory for fuser_output\n");
+		return 1;
+	}
+	fileName = InterChiplet::sendSync(idX, idY, 5, 5);
+	global_pipe_comm.write_data(fileName.c_str(), fuser_output, 1 * 512 * 180 * 180 * sizeof(float));
+	time_end = InterChiplet::writeSync(time_end, idX, idY, 5, 5, 1 * 512 * 180 * 180 * sizeof(float), 0);
 	
-// 	// 正确访问一维数组中的元素
-// 	// for (size_t i = 0; i < 256; ++i) {
-// 	// 	for (size_t j = 0; j < 180; ++j) {
-// 	// 		for (size_t k = 0; k < 180; ++k) {
-// 	// 			size_t index = i * 180 * 180 + j * 180 + k;
-// 	// 			printf("%f ", lidar_backbone_output[index]);
-// 	// 		}
-// 	// 	}
-// 	// }
+	// 正确访问一维数组中的元素
+	// for (size_t i = 0; i < 256; ++i) {
+	// 	for (size_t j = 0; j < 180; ++j) {
+	// 		for (size_t k = 0; k < 180; ++k) {
+	// 			size_t index = i * 180 * 180 + j * 180 + k;
+	// 			printf("%f ", lidar_backbone_output[index]);
+	// 		}
+	// 	}
+	// }
 	
-// 	// 释放内存
-// 	free(fuser_output);
-// 	return 0;
-// }
+	// 释放内存
+	free(fuser_output);
+	return 0;
+}
 
 

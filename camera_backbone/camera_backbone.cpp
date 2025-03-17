@@ -1,5 +1,9 @@
 #include <torch/torch.h>
 #include "camera_backbone.h"
+#include "pipe_comm.h"
+#include "apis_c.h"
+InterChiplet::PipeComm global_pipe_comm;
+
 
 // 定义ResNet-50的Bottleneck模块
 struct BottleneckImpl : torch::nn::Module {
@@ -388,12 +392,28 @@ void camera_backbone(float* img, float* depth, float* camera_features){
     memcpy(camera_features, feature_ptr, 6*32*88*80*sizeof(float));
 }
 
-// int main() {
-//     float* img = new float[1 * 6 * 3 * 256 * 704];
-//     float* depth = new float[1 * 6 * 1 * 256 * 704];
-//     float* camera_backbone_output = camera_backbone(img, depth);
-//     return 0;
-// }
+int main(int argc, char** argv) { // (0,0)
+    int idX = atoi(argv[1]);
+    int idY = atoi(argv[2]);
+    float* img = new float[1 * 6 * 3 * 256 * 704];
+    float* depth = new float[1 * 6 * 1 * 256 * 704];
+    float* camera_backbone_output = new float[6*32*88*80];
+    long long unsigned int timeNow = 1;
+    std::string fileName = InterChiplet::receiveSync(5, 5, idX, idY);
+    global_pipe_comm.read_data(fileName.c_str(), img, 6 * 3 * 256 * 704 * sizeof(float));
+    long long int time_end = InterChiplet::readSync(timeNow, 5, 5, idX, idY, 6 * 3 * 256 * 704 * sizeof(float), 0);
+    std::cout<<"--------------------------------"<<std::endl;
+    fileName = InterChiplet::receiveSync(5, 5, idX, idY);
+    global_pipe_comm.read_data(fileName.c_str(), depth, 6 * 1 * 256 * 704 * sizeof(float));
+    time_end = InterChiplet::readSync(timeNow, 5, 5, idX, idY, 6 * 1 * 256 * 704 * sizeof(float), 0);
+    std::cout<<"--------------------------------"<<std::endl;
+    camera_backbone(img, depth, camera_backbone_output);
+    fileName = InterChiplet::sendSync(idX, idY, 5, 5);
+    global_pipe_comm.write_data(fileName.c_str(), camera_backbone_output, 6 * 32 * 88 * 80 * sizeof(float));
+    time_end = InterChiplet::writeSync(time_end, idX, idY, 5, 5, 6 * 32 * 88 * 80 * sizeof(float), 0);
+    std::cout<<"--------------------------------"<<std::endl;
+    return 0;
+}
 
 // int main() {
 //     // 输入：2张256x256的RGB图像

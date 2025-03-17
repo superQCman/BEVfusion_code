@@ -15,8 +15,8 @@ set(ONNXRUNTIME_LIB_DIR "/usr/local/lib")
 find_library(ONNXRUNTIME_LIBRARY onnxruntime PATHS ${ONNXRUNTIME_LIB_DIR} REQUIRED)
 
 # 设置interchiplet库
-set(INTERCHIPLET_INCLUDE_DIR "${SIMULATOR_ROOT}/interchiplet/includes")
-set(INTERCHIPLET_C_LIB "${SIMULATOR_ROOT}/interchiplet/lib/libinterchiplet_c.a")
+set(INTERCHIPLET_INCLUDE_DIR "$ENV{SIMULATOR_ROOT}/interchiplet/includes")
+set(INTERCHIPLET_C_LIB "$ENV{SIMULATOR_ROOT}/interchiplet/lib/libinterchiplet_c.a")
 
 # 添加子目录
 add_subdirectory(camera_backbone)

@@ -22,7 +22,11 @@
 #include <ctime>
 #include <memory>
 #include "camera_vtransform.h"
+#include "pipe_comm.h"
+#include "apis_c.h"
+#include <torch/torch.h>
 
+InterChiplet::PipeComm global_pipe_comm;
 #define MAX(X,Y) ( X > Y ? X : Y)
 #define MIN(X,Y) ( X < Y ? X : Y)
 #define CLIP(X,L) ( MAX(MIN(X,L), -L) )
@@ -254,8 +258,10 @@ std::shared_ptr<ModelParams> init_tensors() {
         
         auto params = std::make_shared<ModelParams>();
         
+        //获取$BENCHMARK_ROOT/BEVfusion-code/camera_vtransform/build/0.weight.txt
+        std::string weight_path = std::string(getenv("BENCHMARK_ROOT")) + "/camera_vtransform/0.weight.txt";
         // 初始化 tensor_0_weight
-        auto temp_0_weight = read4DTensorFromFile<80,80,3,3>("0.weight.txt");
+        auto temp_0_weight = read4DTensorFromFile<80,80,3,3>(weight_path);
         std::cout << "已加载 0.weight.txt" << std::endl;
         for (size_t i = 0; i < 80; ++i) {
             for (size_t j = 0; j < 80; ++j) {
@@ -268,14 +274,16 @@ std::shared_ptr<ModelParams> init_tensors() {
         }
         
         // 初始化 tensor_0_bias
-        auto temp_0_bias = read1DTensorFromFile<80>("0.bias.txt");
+        std::string bias_path = std::string(getenv("BENCHMARK_ROOT")) + "/camera_vtransform/0.bias.txt";
+        auto temp_0_bias = read1DTensorFromFile<80>(bias_path);
         std::cout << "已加载 0.bias.txt" << std::endl;
         for (size_t i = 0; i < 80; ++i) {
             params->tensor_0_bias[i] = temp_0_bias[i];
         }
         
         // 初始化 tensor_3_weight
-        auto temp_3_weight = read4DTensorFromFile<80,80,3,3>("3.weight.txt");
+        weight_path = std::string(getenv("BENCHMARK_ROOT")) + "/camera_vtransform/3.weight.txt";
+        auto temp_3_weight = read4DTensorFromFile<80,80,3,3>(weight_path);
         std::cout << "已加载 3.weight.txt" << std::endl;
         for (size_t i = 0; i < 80; ++i) {
             for (size_t j = 0; j < 80; ++j) {
@@ -288,14 +296,16 @@ std::shared_ptr<ModelParams> init_tensors() {
         }
         
         // 初始化 tensor_3_bias
-        auto temp_3_bias = read1DTensorFromFile<80>("3.bias.txt");
+        bias_path = std::string(getenv("BENCHMARK_ROOT")) + "/camera_vtransform/3.bias.txt";
+        auto temp_3_bias = read1DTensorFromFile<80>(bias_path);
         std::cout << "已加载 3.bias.txt" << std::endl;
         for (size_t i = 0; i < 80; ++i) {
             params->tensor_3_bias[i] = temp_3_bias[i];
         }
         
         // 初始化 tensor_6_weight
-        auto temp_6_weight = read4DTensorFromFile<80,80,3,3>("6.weight.txt");
+        weight_path = std::string(getenv("BENCHMARK_ROOT")) + "/camera_vtransform/6.weight.txt";
+        auto temp_6_weight = read4DTensorFromFile<80,80,3,3>(weight_path);
         std::cout << "已加载 6.weight.txt" << std::endl;
         for (size_t i = 0; i < 80; ++i) {
             for (size_t j = 0; j < 80; ++j) {
@@ -308,7 +318,8 @@ std::shared_ptr<ModelParams> init_tensors() {
         }
         
         // 初始化 tensor_6_bias
-        auto temp_6_bias = read1DTensorFromFile<80>("6.bias.txt");
+        bias_path = std::string(getenv("BENCHMARK_ROOT")) + "/camera_vtransform/6.bias.txt";
+        auto temp_6_bias = read1DTensorFromFile<80>(bias_path);
         std::cout << "已加载 6.bias.txt" << std::endl;
         for (size_t i = 0; i < 80; ++i) {
             params->tensor_6_bias[i] = temp_6_bias[i];
@@ -322,9 +333,9 @@ std::shared_ptr<ModelParams> init_tensors() {
     }
 }
 
-void entry(std::shared_ptr<ModelParams>& params, float tensor_feat_in[1][80][360][360], float tensor_feat_out[1][80][180][180]){
-    float* feat_in_ptr = &tensor_feat_in[0][0][0][0];
-    float* feat_out_ptr = &tensor_feat_out[0][0][0][0];
+void entry(std::shared_ptr<ModelParams>& params, float* tensor_feat_in, float* tensor_feat_out){
+    float* feat_in_ptr = tensor_feat_in;
+    float* feat_out_ptr = tensor_feat_out;
     
     node_Conv_0(feat_in_ptr, params->tensor_0_weight, params->tensor_0_bias, params);
     node_Relu_1(params->tensor_7_data.get(), params->tensor_8_data.get());
@@ -334,8 +345,33 @@ void entry(std::shared_ptr<ModelParams>& params, float tensor_feat_in[1][80][360
     node_Relu_5(params->tensor_11_data.get(), feat_out_ptr);
 }
 
-float* camera_vtransform(){
+torch::Tensor view_transform(torch::Tensor input) {
+    // 假设 view transformation 通过简单的求平均值来模拟 (6, 32, 88, 80) -> (1, 32, 88, 80)
+    // 实际上应该使用深度感知投影
+    input = input.mean(0, true); // 6个视角的平均值 (1, 32, 88, 80)
+    
+    // 上采样到 (1, 32, 360, 360)
+    input = torch::nn::functional::interpolate(input, 
+                torch::nn::functional::InterpolateFuncOptions()
+                .size(std::vector<int64_t>({360, 360}))
+                .mode(torch::kBilinear)
+                .align_corners(false));
+    
+    return input; // (1, 32, 360, 360)
+}
+
+float* camera_vtransform(float *tensor_input){
     std::cout << "程序开始执行..." << std::endl;
+    torch::Tensor input = torch::from_blob(tensor_input, {6, 32, 88, 80}, torch::kFloat32);
+    torch::Tensor bev_features = view_transform(input);
+    // 3. 通过 1x1 卷积调整通道数 (32 -> 80)
+    torch::nn::Conv2d conv1x1(torch::nn::Conv2dOptions(32, 80, 1));
+    bev_features = conv1x1(bev_features);
+    // 4. 形状转换 (确保符合 (1, 80, 360, 360))
+    bev_features = bev_features.view({1, 80, 360, 360});
+    // 5. 将 torch::Tensor 转换为 float*
+    float* tensor_feat_in = bev_features.data_ptr<float>();
+
         
     // 初始化权重和偏置
     auto params = init_tensors();
@@ -346,17 +382,7 @@ float* camera_vtransform(){
     std::uniform_real_distribution<float> dis(-1.0f, 1.0f);
     
     // 声明输入和输出张量
-    float tensor_feat_in[1][80][360][360] = {0};
-    float tensor_feat_out[1][80][180][180] = {0};
-    
-    // 随机初始化输入数据
-    for(int c = 0; c < 80; c++) {
-        for(int h = 0; h < 360; h++) {
-            for(int w = 0; w < 360; w++) {
-                tensor_feat_in[0][c][h][w] = dis(gen);
-            }
-        }
-    }
+    float *tensor_feat_out = (float*)malloc(1 * 80 * 180 * 180 * sizeof(float));
     
     // 调用处理函数
     entry(params, tensor_feat_in, tensor_feat_out);
@@ -365,27 +391,40 @@ float* camera_vtransform(){
     std::cout << "Output tensor sample values:" << std::endl;
     for(int i = 0; i < 5; i++) {
         std::cout << "tensor_feat_out[0][0][0][" << i << "] = " 
-                << tensor_feat_out[0][0][0][i] << std::endl;
+                << tensor_feat_out[i] << std::endl;
     }
 
-    // 将tensor_feat_out转换为float*
-    float* result = (float*)malloc(1 * 80 * 180 * 180 * sizeof(float));
-    if (result == nullptr) {
-        std::cerr << "Failed to allocate memory for result" << std::endl;
-        return nullptr;
-    }
-
-    memcpy(result, tensor_feat_out, 1 * 80 * 180 * 180 * sizeof(float));
     
     // 打印输入输出张量维度
     std::cout << "\nTensor dimensions:" << std::endl;
     std::cout << "Input tensor:  [1][80][360][360]" << std::endl;
     std::cout << "Output tensor: [1][80][180][180]" << std::endl;
     
-    return result;
+    return tensor_feat_out;
 }
 
-// int main() {
-//     float* camera_vtransform_output = camera_vtransform();
-//     return 0;
-// }
+int main(int argc, char** argv) {
+    int idX = atoi(argv[1]);
+    int idY = atoi(argv[2]);
+    float* tensor_feat_in = (float*)malloc(6 * 32 * 88 * 80 * sizeof(float));
+    // // 随机初始化输入数据
+    // for(int c = 0; c < 6; c++) {
+    //     for(int h = 0; h < 32; h++) {
+    //         for(int w = 0; w < 88; w++) {
+    //             for(int d = 0; d < 80; d++) {
+    //                 tensor_feat_in[((c * 32 + h) * 88 + w) * 80 + d] = 1.0f;
+    //             }
+    //         }
+    //     }
+    // }
+    long long unsigned int timeNow = 1;
+    std::string fileName = InterChiplet::receiveSync(5, 5, idX, idY);
+    global_pipe_comm.read_data(fileName.c_str(), tensor_feat_in, 6 * 32 * 88 * 80 * sizeof(float));
+    long long int time_end = InterChiplet::readSync(timeNow, 5, 5, idX, idY, 6 * 32 * 88 * 80 * sizeof(float), 0);
+    std::cout<<"--------------------------------"<<std::endl;
+    float* camera_vtransform_output = camera_vtransform(tensor_feat_in);
+    fileName = InterChiplet::sendSync(idX, idY, 5, 5);
+    global_pipe_comm.write_data(fileName.c_str(), camera_vtransform_output, 1 * 80 * 180 * 180 * sizeof(float));
+    time_end = InterChiplet::writeSync(time_end, idX, idY, 5, 5, 1 * 80 * 180 * 180 * sizeof(float), 0);
+    return 0;
+}

@@ -1,4 +1,4 @@
-# Install script for directory: /home/ting/SourceCode/BEVfusion-code/camera_vtransform
+# Install script for directory: /home/ting/SourceCode/Chiplet_Heterogeneous_newVersion/benchmark/BEVfusion-code/camera_vtransform
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -50,5 +50,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/ting/SourceCode/BEVfusion-code/camera_vtransform/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/ting/SourceCode/Chiplet_Heterogeneous_newVersion/benchmark/BEVfusion-code/camera_vtransform/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

@@ -1,10 +1,9 @@
 file(REMOVE_RECURSE
   "CMakeFiles/lidar_backbone.dir/lidar_backbone.cpp.o"
   "CMakeFiles/lidar_backbone.dir/lidar_backbone.cpp.o.d"
-  "liblidar_backbone.pdb"
-  "liblidar_backbone.so"
-  "liblidar_backbone.so.1"
-  "liblidar_backbone.so.1.0.0"
+  "lidar_backbone"
+  "lidar_backbone-1.0.0"
+  "lidar_backbone.pdb"
 )
 
 # Per-language clean rules from dependency scanning.
